@@ -29,6 +29,16 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Farcaster Mini App rich embed (imageUrl فقط) */}
+        <meta
+          name="fc:miniapp"
+          content={JSON.stringify({
+            version: "next",
+            imageUrl: "https://hours-miner.vercel.app/og.png",
+          })}
+        />
+      </head>
       <body>
         <Providers>
           <FarcasterReady />
