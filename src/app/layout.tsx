@@ -5,9 +5,8 @@ import "./globals.css";
 import Providers from "./providers";
 import FarcasterReady from "@/components/FarcasterReady";
 import BottomNav from "@/components/BottomNav";
-import WalletConnect from "@/components/WalletConnect";
 
-// URL آمن للميتا
+// ⚠️ URL آمنة للميتا
 const RAW_SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "").trim();
 const SITE_URL: URL | undefined = RAW_SITE_URL ? new URL(RAW_SITE_URL) : undefined;
 
@@ -33,14 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Providers>
           <FarcasterReady />
-
-          <header className="sticky top-0 z-40 bg-bg/70 backdrop-blur border-b border-soft">
-            <div className="mx-auto max-w-3xl px-4 py-3 flex items-center justify-between">
-              <h1 className="text-lg font-bold tracking-wide">HOURS</h1>
-              <WalletConnect />
-            </div>
-          </header>
-
+          {/* ✅ لا يوجد شريط علوي ولا زر WalletConnect هنا */}
           <div className="min-h-screen pb-20">{children}</div>
           <BottomNav />
         </Providers>
