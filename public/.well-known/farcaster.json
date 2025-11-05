@@ -9,7 +9,7 @@
   },
   "miniapp": {
     "version": "1",
-    "name": "hoursrider",
+    "name": "HRS minter",
     "homeUrl": "https://hours-miner.vercel.app",
     "iconUrl": "https://hours-miner.vercel.app/icon.png",
     "splashImageUrl": "https://hours-miner.vercel.app/splash.png",
