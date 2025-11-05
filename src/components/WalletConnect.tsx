@@ -9,41 +9,62 @@ export default function WalletConnect() {
   const { connectAsync, connectors, status: connectStatus } = useConnect();
   const { disconnectAsync } = useDisconnect();
   const { switchChainAsync } = useSwitchChain();
-  const [err, setErr] = useState("");
+  const [err, setErr] = useState<string>("");
 
   const injected = useMemo(() => connectors.find((c) => c.id === "injected"), [connectors]);
-  const walletC = useMemo(() => connectors.find((c) => c.id === "walletConnect"), [connectors]);
-  const coinbase = useMemo(() => connectors.find((c) => c.id === "coinbaseWallet"), [connectors]);
+  // (اختياري) أضف لاحقًا:
+  // const cb = useMemo(() => connectors.find((c) => c.id === "coinbaseWallet"), [connectors]);
+  // const wc = useMemo(() => connectors.find((c) => c.id === "walletConnect"), [connectors]);
 
   const ensureBase = useCallback(async () => {
     try { await switchChainAsync({ chainId: base.id }); } catch {}
   }, [switchChainAsync]);
 
+  // محاولة اتصال Farcaster Injected بقوة (مفيد للجوال)
+  const connectFarcasterInjected = useCallback(async () => {
+    // 1) تحقق مزوّد EIP-1193
+    const eth: any = typeof window !== "undefined" ? (window as any).ethereum : undefined;
+    if (!eth) throw new Error("Farcaster provider not found");
+
+    try {
+      // 2) طلب صلاحية الحساب مباشرة قبل wagmi (يعالج مزالق الجوال)
+      await eth.request?.({ method: "eth_requestAccounts" });
+    } catch (e) {
+      // يتجاهل لو رفض — wagmi سيظهر رسالة أنسب
+    }
+
+    if (!injected) throw new Error("Injected connector unavailable");
+
+    // 3) اتصال عبر wagmi
+    const res = await connectAsync({ connector: injected });
+    await ensureBase();
+    return res;
+  }, [connectAsync, injected, ensureBase]);
+
   const onConnect = useCallback(async () => {
     setErr("");
     try {
-      const hasInjected = typeof window !== "undefined" && (window as any).ethereum;
-      if (injected && hasInjected) {
-        await connectAsync({ connector: injected });
-        await ensureBase();
-        return;
-      }
-      if (coinbase) {
-        await connectAsync({ connector: coinbase });
-        await ensureBase();
-        return;
-      }
-      if (walletC) {
-        // على الجوال سيفتح تطبيق المحفظة تلقائيًا
-        await connectAsync({ connector: walletC });
-        await ensureBase();
-        return;
-      }
-      throw new Error("No wallet provider found. Enable WalletConnect in providers.");
+      // ✅ الأولوية لمحفظة Farcaster (injected)
+      await connectFarcasterInjected();
+      return;
     } catch (e: any) {
-      setErr(e?.shortMessage ?? e?.message ?? "Failed to connect");
+      // لو ما توفر أو فشل، أعرض سببًا واضحًا
+      const msg = e?.shortMessage ?? e?.message ?? "Failed to connect Farcaster wallet";
+      setErr(msg);
+
+      // (اختياري) سقوط لمحفظة خارجية:
+      // try {
+      //   if (cb) {
+      //     await connectAsync({ connector: cb }); await ensureBase(); return;
+      //   }
+      //   if (wc) {
+      //     await connectAsync({ connector: wc }); await ensureBase(); return;
+      //   }
+      // } catch (e2: any) {
+      //   setErr(e2?.shortMessage ?? e2?.message ?? "Failed to connect external wallet");
+      // }
     }
-  }, [connectAsync, injected, coinbase, walletC, ensureBase]);
+  }, [connectFarcasterInjected /*, connectAsync, cb, wc, ensureBase*/]);
 
   const onDisconnect = async () => {
     setErr("");
@@ -65,7 +86,7 @@ export default function WalletConnect() {
         className="btn btn-primary"
         onClick={onConnect}
         disabled={connectStatus === "pending"}
-        title="Connect Farcaster / External Wallet"
+        title="Connect Farcaster Wallet"
       >
         {connectStatus === "pending" ? "Connecting…" : "Connect Wallet"}
       </button>
