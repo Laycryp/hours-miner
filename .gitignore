@@ -187,3 +187,4 @@ vite.config.ts.timestamp-*
 .vercel
 logs
 
+.vercel

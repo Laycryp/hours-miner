@@ -9,18 +9,22 @@ export default function CastButton({
     const text = prefill;
     const embedUrl =
       urlEmbed || (typeof window !== "undefined" ? window.location.origin : "");
+
     try {
+      // embeds يجب أن تكون string[] ([] | [string] | [string, string])
       await sdk.actions.composeCast({
         text,
-        embeds: embedUrl ? [{ url: embedUrl }] : [],
+        embeds: embedUrl ? [embedUrl] : [], // ← هنا التعديل
       });
     } catch {
+      // fallback لواجهة Warpcast
       const target = `https://warpcast.com/~/compose?text=${encodeURIComponent(
         text
       )}${embedUrl ? `&embeds[]=${encodeURIComponent(embedUrl)}` : ""}`;
       window.open(target, "_blank", "noopener,noreferrer");
     }
   };
+
   return (
     <button className="btn btn-primary min-w-[120px] h-10 px-4" onClick={onCast}>
       Publish Cast

@@ -2,7 +2,9 @@
 
 // ====== Addresses ======
 /** Base mainnet */
-export const HOURS_MINER = "0x537088f6c012e68fafb91d23aaa46b8eefab29b2" as `0x${string}`;
+export const HOURS_MINER =
+  (process.env.NEXT_PUBLIC_MINER as `0x${string}`) ??
+  "0x537088f6c012e68fafb91d23aaa46b8eefab29b2";
 
 // (اختياري) ضع عنوان التوكن إن أردت عرضه في الواجهة
 export const HOURS_TOKEN: `0x${string}` | undefined = undefined;
