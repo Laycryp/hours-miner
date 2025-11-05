@@ -1,17 +1,17 @@
 "use client";
 import { sdk } from "@farcaster/miniapp-sdk";
 
-const MINIAPP_URL = "https://farcaster.xyz/miniapps/3PWnYsB8jh0c/hoursrider";
+const TEXT =
+  "⛏️ Mining HOURS (HRS$) on Base claim anytime try it .\n" +
+  "gBase🟦 \n" +
+  "https://farcaster.xyz/miniapps/3PWnYsB8jh0c/hrs-minter";
 
-export default function CastButton({
-  prefill = "⛏️ Mining HOURS (HRS) on Base — claim anytime from My Supply.",
-}: { prefill?: string }) {
+export default function CastButton() {
   const onCast = async () => {
-    const text = `${prefill}\n\n${MINIAPP_URL}`;
     try {
-      await sdk.actions.composeCast({ text });
+      await sdk.actions.composeCast({ text: TEXT });
     } catch {
-      const target = `https://warpcast.com/~/compose?text=${encodeURIComponent(text)}`;
+      const target = `https://warpcast.com/~/compose?text=${encodeURIComponent(TEXT)}`;
       window.open(target, "_blank", "noopener,noreferrer");
     }
   };
