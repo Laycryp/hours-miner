@@ -5,7 +5,7 @@ import { WagmiProvider, createConfig, http } from "wagmi";
 import { base } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { injected, walletConnect, coinbaseWallet } from "@wagmi/connectors";
-import { farcasterFrame } from "@farcaster/frame-wagmi-connector";
+import { farcasterFrame } from "@farcaster/miniapp-wagmi-connector";
 
 const BASE_RPC = process.env.NEXT_PUBLIC_BASE_RPC ?? "https://mainnet.base.org";
 const WC_ID = process.env.NEXT_PUBLIC_WALLETCONNECT_ID; // اختياري
