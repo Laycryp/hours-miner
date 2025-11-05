@@ -3,7 +3,7 @@ import { sdk } from "@farcaster/miniapp-sdk";
 
 const TEXT =
   "https://farcaster.xyz/miniapps/3PWnYsB8jh0c/hrs-minter ⛏️ Mining HOURS (HRS$) on Base claim anytime try it .\n" +
-  "gBase🟦\n" +
+  "gBase🟦\n"
   
 export default function CastButton() {
   const onCast = async () => {
