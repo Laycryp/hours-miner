@@ -3,53 +3,46 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-function Tab({
-  href,
-  label,
-  active,
-  children,
-}: {
-  href: string;
-  label: string;
-  active: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <Link
-      href={href}
-      className={`flex flex-col items-center justify-center gap-1 px-4 py-2 ${
-        active ? "text-accent" : "text-muted"
-      }`}
-    >
-      {children}
-      <span className="text-xs">{label}</span>
-    </Link>
-  );
-}
+const tabs = [
+  { href: "/", label: "Miner", icon: "?" },          // ضع أيقوناتك المعتادة هنا
+  { href: "/wallet", label: "My Supply", icon: "▭" },
+  { href: "/tasks", label: "Tasks", icon: "★" },
+];
 
 export default function BottomNav() {
   const pathname = usePathname();
+
   return (
-    <nav className="bottom-nav">
-      <Tab href="/" label="Miner" active={pathname === "/"}>
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <path d="M3 8c4-4 10-4 14 0" stroke="currentColor" strokeWidth="2" />
-          <path d="M9 14l6-6M11 16l-7 7" stroke="currentColor" strokeWidth="2" />
-        </svg>
-      </Tab>
-
-      <Tab href="/wallet" label="My Supply" active={pathname.startsWith("/wallet")}>
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <rect x="3" y="6" width="18" height="12" rx="2" stroke="currentColor" strokeWidth="2" />
-          <circle cx="17" cy="12" r="1.5" fill="currentColor" />
-        </svg>
-      </Tab>
-
-      <Tab href="/tasks" label="Tasks" active={pathname.startsWith("/tasks")}>
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <path d="M12 3l2.8 6H22l-5 4.2L18.7 21 12 17.5 5.3 21 7 13.2 2 9h7.2L12 3z" stroke="currentColor" strokeWidth="2" />
-        </svg>
-      </Tab>
+    <nav
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-soft/60 bg-bg/85 backdrop-blur"
+      style={{
+        // ارتفاع أساسي + مساحة آمنة لآيفون
+        paddingBottom: "max(env(safe-area-inset-bottom), 10px)",
+      }}
+    >
+      <div className="mx-auto max-w-3xl px-4">
+        <ul className="flex items-stretch justify-between gap-1">
+          {tabs.map((t) => {
+            const active = pathname === t.href;
+            return (
+              <li key={t.href} className="flex-1">
+                <Link
+                  href={t.href}
+                  className={`flex flex-col items-center justify-center rounded-xl transition-colors
+                              min-h-14 py-2
+                              ${active ? "text-accent" : "text-white/80 hover:text-white"}`}
+                >
+                  <span className="text-xl leading-none">{t.icon}</span>
+                  {/* تكبير الخط + وزن أوضح */}
+                  <span className={`mt-1 leading-none ${active ? "font-semibold" : "font-medium"} text-[15px]`}>
+                    {t.label}
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </nav>
   );
 }

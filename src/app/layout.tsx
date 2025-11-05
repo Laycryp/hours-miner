@@ -32,8 +32,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Providers>
           <FarcasterReady />
-          {/* ✅ لا يوجد شريط علوي ولا زر WalletConnect هنا */}
-          <div className="min-h-screen pb-20">{children}</div>
+          {/* مساحة كافية أسفل المحتوى + دعم safe-area للآيفون */}
+          <div
+            className="min-h-screen"
+            style={{ paddingBottom: "calc(96px + max(env(safe-area-inset-bottom), 10px))" }}
+          >
+            {children}
+          </div>
           <BottomNav />
         </Providers>
       </body>
