@@ -5,7 +5,7 @@
     "signature": "ugc8Zjg2rn22bXTwa0oWmk8W/l5CzOx7LlE1GdfoEWBfINhI636Ne1NNlVgOnApT3atgTQLK6st8z1r7jIMn7Bs="
   },
   "baseBuilder": {
-    "ownerAddress": "0x6cfbA969A424baC0f18d1CA674f34B8B2907bb5f"
+    "ownerAddress": "0xE7668146CDC2326bb1a2Db36201ac71d8e9A1233"
   },
   "miniapp": {
     "version": "1",
@@ -15,11 +15,11 @@
     "splashImageUrl": "https://hours-miner.vercel.app/splash.png",
     "splashBackgroundColor": "#0B1020",
     "subtitle": "Mine HRS every 12 hours",
-    "description": "Start mining HOURS (HRS) every 12 hours. Claim to your supply, boost via tasks, and withdraw on Base.",
+    "description": "Start mining HOURS HRS every 12 hours. Claim to your supply, boost via tasks, and withdraw on Base.",
     "primaryCategory": "games",
     "tags": ["mining","hrs","crypto"],
     "ogTitle": "hoursrider",
-    "ogDescription": "HOURS (HRS) Mini App",
+    "ogDescription": "HOURS HRS Mini App",
     "ogImageUrl": "https://hours-miner.vercel.app/og.png",
     "webhookUrl": "https://api.neynar.com/f/app/ac9a59a9-fec9-4c1e-8cdf-a81a853db0e3/event",
     "noindex": true
