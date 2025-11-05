@@ -1,22 +1,28 @@
 "use client";
+import { useEffect } from "react";
 import { sdk } from "@farcaster/miniapp-sdk";
 
 const TEXT =
   "⛏️ Mining HOURS (HRS$) on Base claim anytime try it .\n" +
-  "gBase🟦\n"
+  "gBase🟦\n" +
+  "https://farcaster.xyz/miniapps/3PWnYsB8jh0c/hrs-minter";
 
-const LINK = "https://farcaster.xyz/miniapps/3PWnYsB8jh0c/hrs-minter";
+const HOME_URL = "https://hours-miner.vercel.app"; // يحمل fc:miniapp meta
 
 export default function CastButton() {
+  useEffect(() => { try { sdk.actions.ready(); } catch {} }, []);
+
   const onCast = async () => {
     try {
-      // نضع الرابط نفسه كـ embed لضمان المعاينة — النص يبقى كما هو
-      await sdk.actions.composeCast({ text: TEXT, embeds: [LINK] });
+      await sdk.actions.composeCast({
+        text: TEXT,
+        embeds: [HOME_URL],          // ← هذا ما يُظهر المعاينة داخل Base App
+      });
     } catch {
-      // fallback لواجهة Warpcast مع embeds[]
-      const q = new URLSearchParams({ text: TEXT });
-      q.append("embeds[]", LINK);
-      const target = `https://warpcast.com/~/compose?${q.toString()}`;
+      // Fallback لواجهة Warpcast
+      const params = new URLSearchParams({ text: TEXT });
+      params.append("embeds[]", HOME_URL);
+      const target = `https://warpcast.com/~/compose?${params.toString()}`;
       window.open(target, "_blank", "noopener,noreferrer");
     }
   };

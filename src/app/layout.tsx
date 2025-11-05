@@ -35,7 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           name="fc:miniapp"
           content={JSON.stringify({
             version: "next",
-            imageUrl: "https://hours-miner.vercel.app/og.png",
+            imageUrl: "https://hours-miner.vercel.app/public/og.png",
           })}
         />
       </head>
