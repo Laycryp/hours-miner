@@ -1,26 +1,32 @@
 "use client";
 import { sdk } from "@farcaster/miniapp-sdk";
 
+const MINIAPP_URL = "https://farcaster.xyz/miniapps/3PWnYsB8jh0c/hoursrider";
+
 export default function CastButton({
-  prefill = "⛏️ Mining HOURS (HRS) on Base — claim anytime from My Supply.",
+  prefill = "⛏️ Mining HOURS (HRS$) on Base  claim anytime.",
   urlEmbed,
 }: { prefill?: string; urlEmbed?: string }) {
   const onCast = async () => {
-    const text = prefill;
-    const embedUrl =
+    // نص الترويج + سطر فارغ + رابط الميني-آب
+    const text = `${prefill}\n\n${MINIAPP_URL}`;
+
+    // نحدّد رابط الصفحة الحالي (إن وجد) لشرحه ضمن embeds بجانب رابط الميني-آب
+    const origin =
       urlEmbed || (typeof window !== "undefined" ? window.location.origin : "");
 
+    // نبني embeds وفق النوع المدعوم: [] | [string] | [string, string]
+    const embeds: [] | [string] | [string, string] =
+      origin && origin !== MINIAPP_URL ? [origin, MINIAPP_URL] : [MINIAPP_URL];
+
     try {
-      // embeds يجب أن تكون string[] ([] | [string] | [string, string])
-      await sdk.actions.composeCast({
-        text,
-        embeds: embedUrl ? [embedUrl] : [], // ← هنا التعديل
-      });
+      await sdk.actions.composeCast({ text, embeds });
     } catch {
       // fallback لواجهة Warpcast
-      const target = `https://warpcast.com/~/compose?text=${encodeURIComponent(
-        text
-      )}${embedUrl ? `&embeds[]=${encodeURIComponent(embedUrl)}` : ""}`;
+      const q = new URLSearchParams({ text });
+      // embeds[] يمكن تكرارها
+      (Array.isArray(embeds) ? embeds : []).forEach((u) => q.append("embeds[]", u));
+      const target = `https://warpcast.com/~/compose?${q.toString()}`;
       window.open(target, "_blank", "noopener,noreferrer");
     }
   };
