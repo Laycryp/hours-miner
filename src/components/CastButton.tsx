@@ -3,8 +3,7 @@ import { sdk } from "@farcaster/miniapp-sdk";
 
 const TEXT =
   "⛏️ Mining HOURS (HRS$) on Base claim anytime try it .\n" +
-  "gBase🟦\n" +
-  "https://farcaster.xyz/miniapps/3PWnYsB8jh0c/hrs-minter";
+  "gBase🟦\n"
 
 const LINK = "https://farcaster.xyz/miniapps/3PWnYsB8jh0c/hrs-minter";
 
