@@ -6,6 +6,8 @@ import Providers from "./providers";
 import NeynarProvider from "./neynar-provider";
 import FarcasterReady from "@/components/FarcasterReady";
 import BottomNav from "@/components/BottomNav";
+import FarcasterSignIn from "@/components/FarcasterSignIn";
+import WalletConnect from "@/components/WalletConnect";
 
 // ⚠️ تهيئة URL آمنة: نتجاهل السلسلة الفارغة لتفادي ERR_INVALID_URL وقت البناء
 const RAW_SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "").trim();
@@ -34,6 +36,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers>
           <NeynarProvider>
             <FarcasterReady />
+
+            {/* شريط علوي بسيط يظهر في كل الصفحات */}
+            <header className="sticky top-0 z-40 bg-bg/70 backdrop-blur border-b border-soft">
+              <div className="mx-auto max-w-3xl px-4 py-3 flex items-center justify-between">
+                <h1 className="text-lg font-bold tracking-wide">HOURS</h1>
+                <div className="flex items-center gap-2">
+                  <FarcasterSignIn />
+                  <WalletConnect />
+                </div>
+              </div>
+            </header>
+
             <div className="min-h-screen pb-20">{children}</div>
             <BottomNav />
           </NeynarProvider>
