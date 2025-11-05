@@ -6,7 +6,7 @@ import { base } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { injected } from "wagmi/connectors"; // ✅ Farcaster/Browser-injected
 // (اختياري) لو عندك WalletConnect ProjectId فعّل التالي:
-// import { walletConnect } from "wagmi/connectors";
+import { walletConnect } from "wagmi/connectors";
 
 const BASE_RPC = process.env.NEXT_PUBLIC_BASE_RPC ?? "https://mainnet.base.org";
 // (اختياري) WalletConnect:
