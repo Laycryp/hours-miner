@@ -2,28 +2,52 @@
 
 import { useAccount, useConnect, useDisconnect, useSwitchChain } from "wagmi";
 import { base } from "wagmi/chains";
-import { useCallback } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 export default function WalletConnect() {
   const { address, isConnected } = useAccount();
-  const { connect, connectors, status: connectStatus } = useConnect();
+  const { connectAsync, connectors, status: connectStatus } = useConnect();
   const { disconnectAsync } = useDisconnect();
   const { switchChainAsync } = useSwitchChain();
+  const [err, setErr] = useState<string>("");
+
+  const injected = useMemo(() => connectors.find((c) => c.id === "injected"), [connectors]);
+  const walletConnect = useMemo(() => connectors.find((c) => c.id === "walletConnect"), [connectors]);
+  const coinbase = useMemo(() => connectors.find((c) => c.id === "coinbaseWallet"), [connectors]);
 
   const ensureBase = useCallback(async () => {
     try { await switchChainAsync({ chainId: base.id }); } catch {}
   }, [switchChainAsync]);
 
-  const onConnect = async () => {
-    // نفس منطق الملف: نختار أول Connector (Injected/Farcaster داخل الميني-آب)
-    const first = connectors?.[0];
-    if (first) {
-      await connect({ connector: first });
-      await ensureBase();
+  const onConnect = useCallback(async () => {
+    setErr("");
+    try {
+      // 1) Farcaster/Injected أولاً
+      if (injected) {
+        await connectAsync({ connector: injected });
+        await ensureBase();
+        return;
+      }
+      // 2) Coinbase Wallet (إن وُجد)
+      if (coinbase) {
+        await connectAsync({ connector: coinbase });
+        await ensureBase();
+        return;
+      }
+      // 3) WalletConnect (fallback عالمي)
+      if (walletConnect) {
+        await connectAsync({ connector: walletConnect });
+        await ensureBase();
+        return;
+      }
+      throw new Error("No compatible wallet connector found.");
+    } catch (e: any) {
+      setErr(e?.shortMessage ?? e?.message ?? "Failed to connect wallet");
     }
-  };
+  }, [connectAsync, injected, coinbase, walletConnect, ensureBase]);
 
   const onDisconnect = async () => {
+    setErr("");
     await disconnectAsync();
   };
 
@@ -37,13 +61,16 @@ export default function WalletConnect() {
   }
 
   return (
-    <button
-      className="btn btn-primary"
-      onClick={onConnect}
-      disabled={connectStatus === "pending"}
-      title="Sign in with Farcaster Wallet"
-    >
-      {connectStatus === "pending" ? "Connecting…" : "Sign in with Farcaster Wallet"}
-    </button>
+    <div className="flex items-center gap-2">
+      <button
+        className="btn btn-primary"
+        onClick={onConnect}
+        disabled={connectStatus === "pending"}
+        title="Connect Farcaster / External Wallet"
+      >
+        {connectStatus === "pending" ? "Connecting…" : "Connect Wallet"}
+      </button>
+      {err && <span className="text-xs text-red-400">{err}</span>}
+    </div>
   );
 }

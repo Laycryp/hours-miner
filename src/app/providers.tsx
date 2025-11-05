@@ -4,19 +4,19 @@ import { ReactNode } from "react";
 import { WagmiProvider, createConfig, http } from "wagmi";
 import { base } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { injected } from "wagmi/connectors"; // ← مهم لفاركاستر
-// (اختياري) WalletConnect:
-// import { walletConnect } from "wagmi/connectors";
+import { injected, coinbaseWallet, walletConnect } from "wagmi/connectors";
 
 const BASE_RPC = process.env.NEXT_PUBLIC_BASE_RPC ?? "https://mainnet.base.org";
-// const WC_ID = process.env.NEXT_PUBLIC_WALLETCONNECT_ID; // إن احتجته لاحقاً
+const WC_ID = process.env.NEXT_PUBLIC_WALLETCONNECT_ID; // اختياري
 
 export const config = createConfig({
   chains: [base],
   transports: { [base.id]: http(BASE_RPC) },
+  // 👇 ترتيب الأولوية: Injected (Farcaster) → Coinbase → WalletConnect
   connectors: [
     injected({ shimDisconnect: true }),
-    // walletConnect({ projectId: WC_ID!, showQrModal: true }),
+    coinbaseWallet({ appName: "HOURS", preference: "all" }),
+    ...(WC_ID ? [walletConnect({ projectId: WC_ID, showQrModal: true })] : []),
   ],
   ssr: true,
 });
