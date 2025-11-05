@@ -3,23 +3,28 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import Providers from "./providers";
+import NeynarProvider from "./neynar-provider";
 import FarcasterReady from "@/components/FarcasterReady";
 import BottomNav from "@/components/BottomNav";
+
+// ⚠️ تهيئة URL آمنة: نتجاهل السلسلة الفارغة لتفادي ERR_INVALID_URL وقت البناء
+const RAW_SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "").trim();
+const SITE_URL: URL | undefined = RAW_SITE_URL ? new URL(RAW_SITE_URL) : undefined;
 
 export const metadata: Metadata = {
   title: "HOURS — Time-based mining on Base",
   description: "Mine HOURS (HRS) every cycle. Withdraw anytime from My Supply.",
+  ...(SITE_URL ? { metadataBase: SITE_URL } : {}),
   openGraph: {
     title: "HOURS — Time-based mining on Base",
     description: "Mine HOURS (HRS) every cycle. Withdraw anytime from My Supply.",
-    images: ["/brand/og_hours_1200x630.png"],
+    images: ["/brand/og_hours_v3_1200x630.png"],
   },
   icons: {
-    icon: "/brand/hours_app_icon_1024.png",
-    shortcut: "/brand/hours_app_icon_1024.png",
-    apple: "/brand/hours_app_icon_1024.png",
+    icon: "/brand/hours_app_icon_v3_1024.png",
+    shortcut: "/brand/hours_app_icon_v3_1024.png",
+    apple: "/brand/hours_app_icon_v3_1024.png",
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://your-domain.example"),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -27,14 +32,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body>
         <Providers>
-          {/* Mini App readiness */}
-          <FarcasterReady />
-
-          {/* مساحة المحتوى مع حافة سفلية لعدم تغطية البار */}
-          <div className="min-h-screen pb-20">{children}</div>
-
-          {/* الشريط السفلي ثابت لكل الصفحات */}
-          <BottomNav />
+          <NeynarProvider>
+            <FarcasterReady />
+            <div className="min-h-screen pb-20">{children}</div>
+            <BottomNav />
+          </NeynarProvider>
         </Providers>
       </body>
     </html>
