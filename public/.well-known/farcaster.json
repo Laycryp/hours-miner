@@ -11,8 +11,8 @@
     "version": "1",
     "name": "HRS minter",
     "homeUrl": "https://hours-miner.vercel.app",
-    "iconUrl": "https://hours-miner.vercel.app/public/icon.png",
-    "splashImageUrl": "https://hours-miner.vercel.app/public/splash.png",
+    "iconUrl": "https://hours-miner.vercel.app/icon.png",
+    "splashImageUrl": "https://hours-miner.vercel.app/splash.png",
     "splashBackgroundColor": "#0B1020",
     "subtitle": "Mine HRS every 12 hours",
     "description": "Start mining HOURS HRS every 12 hours. Claim to your supply, boost via tasks, and withdraw on Base.",
@@ -20,7 +20,7 @@
     "tags": ["mining","hrs","crypto"],
     "ogTitle": "hoursrider",
     "ogDescription": "HOURS HRS Mini App",
-    "ogImageUrl": "https://hours-miner.vercel.app/public/og.png",
+    "ogImageUrl": "https://hours-miner.vercel.app/og.png",
     "webhookUrl": "https://api.neynar.com/f/app/ac9a59a9-fec9-4c1e-8cdf-a81a853db0e3/event",
     "noindex": true
     
