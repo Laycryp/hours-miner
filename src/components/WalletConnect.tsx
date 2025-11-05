@@ -9,10 +9,10 @@ export default function WalletConnect() {
   const { connectAsync, connectors, status: connectStatus } = useConnect();
   const { disconnectAsync } = useDisconnect();
   const { switchChainAsync } = useSwitchChain();
-  const [err, setErr] = useState<string>("");
+  const [err, setErr] = useState("");
 
   const injected = useMemo(() => connectors.find((c) => c.id === "injected"), [connectors]);
-  const walletConnect = useMemo(() => connectors.find((c) => c.id === "walletConnect"), [connectors]);
+  const walletC = useMemo(() => connectors.find((c) => c.id === "walletConnect"), [connectors]);
   const coinbase = useMemo(() => connectors.find((c) => c.id === "coinbaseWallet"), [connectors]);
 
   const ensureBase = useCallback(async () => {
@@ -22,29 +22,28 @@ export default function WalletConnect() {
   const onConnect = useCallback(async () => {
     setErr("");
     try {
-      // 1) Farcaster/Injected أولاً
-      if (injected) {
+      const hasInjected = typeof window !== "undefined" && (window as any).ethereum;
+      if (injected && hasInjected) {
         await connectAsync({ connector: injected });
         await ensureBase();
         return;
       }
-      // 2) Coinbase Wallet (إن وُجد)
       if (coinbase) {
         await connectAsync({ connector: coinbase });
         await ensureBase();
         return;
       }
-      // 3) WalletConnect (fallback عالمي)
-      if (walletConnect) {
-        await connectAsync({ connector: walletConnect });
+      if (walletC) {
+        // على الجوال سيفتح تطبيق المحفظة تلقائيًا
+        await connectAsync({ connector: walletC });
         await ensureBase();
         return;
       }
-      throw new Error("No compatible wallet connector found.");
+      throw new Error("No wallet provider found. Enable WalletConnect in providers.");
     } catch (e: any) {
-      setErr(e?.shortMessage ?? e?.message ?? "Failed to connect wallet");
+      setErr(e?.shortMessage ?? e?.message ?? "Failed to connect");
     }
-  }, [connectAsync, injected, coinbase, walletConnect, ensureBase]);
+  }, [connectAsync, injected, coinbase, walletC, ensureBase]);
 
   const onDisconnect = async () => {
     setErr("");

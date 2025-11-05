@@ -1,5 +1,4 @@
 "use client";
-import { useEffect } from "react";
 import { sdk } from "@farcaster/miniapp-sdk";
 
 const TEXT =
@@ -7,17 +6,18 @@ const TEXT =
   "gBase🟦\n" +
   "https://farcaster.xyz/miniapps/3PWnYsB8jh0c/hrs-minter";
 
-export default function CastButton() {
-  useEffect(() => {
-    try { sdk.actions.ready(); } catch {}
-  }, []);
+const LINK = "https://farcaster.xyz/miniapps/3PWnYsB8jh0c/hrs-minter";
 
+export default function CastButton() {
   const onCast = async () => {
     try {
-      await sdk.actions.composeCast({ text: TEXT });
+      // نضع الرابط نفسه كـ embed لضمان المعاينة — النص يبقى كما هو
+      await sdk.actions.composeCast({ text: TEXT, embeds: [LINK] });
     } catch {
-      // fallback لواجهة Warpcast
-      const target = `https://warpcast.com/~/compose?text=${encodeURIComponent(TEXT)}`;
+      // fallback لواجهة Warpcast مع embeds[]
+      const q = new URLSearchParams({ text: TEXT });
+      q.append("embeds[]", LINK);
+      const target = `https://warpcast.com/~/compose?${q.toString()}`;
       window.open(target, "_blank", "noopener,noreferrer");
     }
   };
