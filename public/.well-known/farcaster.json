@@ -1,0 +1,28 @@
+{
+  "accountAssociation": {
+    "header": "",
+    "payload": "",
+    "signature": ""
+  },
+  "baseBuilder": {
+    "ownerAddress": "0x6cfbA969A424baC0f18d1CA674f34B8B2907bb5f"
+  },
+  "miniapp": {
+    "version": "1",
+    "name": "hoursrider",
+    "homeUrl": "https://charitable-dpi-articles-congratulations.trycloudflare.com",
+    "iconUrl": "https://charitable-dpi-articles-congratulations.trycloudflare.com/icon.png",
+    "splashImageUrl": "https://charitable-dpi-articles-congratulations.trycloudflare.com/splash.png",
+    "splashBackgroundColor": "#0B1020",
+    "subtitle": "Mine HRS every 12 hours",
+    "description": "Start mining HOURS (HRS) every 12 hours. Claim to your supply, boost via tasks, and withdraw on Base.",
+    "primaryCategory": "games",
+    "tags": ["mining","hrs","crypto"],
+    "ogTitle": "hoursrider",
+    "ogDescription": "HOURS (HRS) Mini App",
+    "ogImageUrl": "https://charitable-dpi-articles-congratulations.trycloudflare.com/og.png",
+    "webhookUrl": "https://api.neynar.com/f/app/ac9a59a9-fec9-4c1e-8cdf-a81a853db0e3/event",
+    "noindex": true
+    
+  }
+}
